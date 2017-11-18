@@ -58,4 +58,15 @@ public class UserController {
         }
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
+
+    @RequestMapping(
+            value = "create",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = userService.createUser(user);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
 }

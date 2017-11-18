@@ -18,15 +18,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User getUser(Long id){
+    public User getUser(Long id) {
         return userRepository.findOne(id);
     }
 
-    public Collection<User> getAll(){
+    public Collection<User> getAll() {
         return userRepository.findAll();
     }
 
-    public User updateUser(User user){
+    public User updateUser(User user) {
         User userToUpdate = getUser(user.getUserId());
         if (userToUpdate == null) {
             throw new NoResultException("User not found");
@@ -36,5 +36,9 @@ public class UserService {
         userToUpdate.setAge(user.getAge());
 
         return userRepository.save(userToUpdate);
+    }
+
+    public User createUser(User user) {
+        return userRepository.save(user);
     }
 }
