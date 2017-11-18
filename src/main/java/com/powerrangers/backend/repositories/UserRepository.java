@@ -1,4 +1,4 @@
-package com.powerrangers.backend.repository;
+package com.powerrangers.backend.repositories;
 
 import com.powerrangers.backend.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
