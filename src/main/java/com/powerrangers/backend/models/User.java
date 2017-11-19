@@ -1,7 +1,5 @@
 package com.powerrangers.backend.models;
 
-import org.springframework.cache.annotation.Cacheable;
-
 import javax.persistence.*;
 
 @Table(name = "users")

@@ -1,11 +1,12 @@
 package com.powerrangers.backend.controllers;
 
-import com.powerrangers.backend.service.UserService;
 import com.powerrangers.backend.models.User;
+import com.powerrangers.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -20,13 +21,63 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping("/all")
-    public Collection<User> getAll(){
-        return userService.getAll();
+    @RequestMapping(
+            value = "/all",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<Collection<User>> getAll() {
+        Collection<User> collection = userService.getAll();
+        return new ResponseEntity<>(collection, HttpStatus.OK);
     }
 
-    @RequestMapping("{id}")
-    public User getUser(@PathVariable("id") Long id){
-        return userService.getUser(id);
+    @RequestMapping(
+            value = "{id}",
+            method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+        User user = userService.getUser(id);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "{id}",
+            method = RequestMethod.PUT,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<User> updateUser(@RequestBody User user){
+        User updatedUser = userService.updateUser(user);
+        if (updatedUser == null){
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    @RequestMapping(
+            value = "create",
+            method = RequestMethod.POST,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = userService.createUser(user);
+        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(
+            value = "{id}",
+            method = RequestMethod.DELETE,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
