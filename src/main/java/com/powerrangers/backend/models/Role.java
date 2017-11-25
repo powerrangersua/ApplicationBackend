@@ -1,19 +1,17 @@
 package com.powerrangers.backend.models;
 
-import org.springframework.data.annotation.Id;
-
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table(name = "roles")
 public class Role {
-    private Long id;
-    private String name;
-    private Set<User> users;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    private String name;
+    private User[] users;
+
     public Long getId() {
         return id;
     }
@@ -31,11 +29,12 @@ public class Role {
     }
 
     @ManyToMany(mappedBy = "roles")
-    public Set<User> getUsers() {
+    public User[] getUsers() {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(User[] users) {
         this.users = users;
     }
 }
+

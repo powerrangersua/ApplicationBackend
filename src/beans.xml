@@ -1,0 +1,6 @@
+<beans xmlns="http://www.springframework.org/schema/beans">
+    <bean id="bCryptPasswordEncoder"
+          class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+        <constructor-arg value="100"/>
+    </bean>
+</beans>

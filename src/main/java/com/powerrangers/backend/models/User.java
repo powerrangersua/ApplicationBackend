@@ -1,7 +1,6 @@
 package com.powerrangers.backend.models;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Table(name = "users")
 @Entity
@@ -15,9 +14,10 @@ public class User {
     private String password;
     private String name;
     private String surname;
+    private String avatarFilename;
 
     private int age;
-    private Set<Role> roles;
+    private Role[] roles;
 
     public Long getUserId() {
         return userId;
@@ -67,17 +67,25 @@ public class User {
         this.age = age;
     }
 
+    public String getAvatarFilename() {
+        return avatarFilename;
+    }
+
+    public void setAvatarFilename(String avatarFilename) {
+        this.avatarFilename = avatarFilename;
+    }
+
     @ManyToMany
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    public Set<Role> getRoles() {
+    public Role[] getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Role[] roles) {
         this.roles = roles;
     }
 }
