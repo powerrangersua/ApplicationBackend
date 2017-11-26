@@ -5,7 +5,6 @@ import com.powerrangers.backend.models.User;
 import com.powerrangers.backend.repositories.RoleRepository;
 import com.powerrangers.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
@@ -16,28 +15,19 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final IStorageService storageService;
     private final RoleRepository roleRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder, IStorageService storageService) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.storageService = storageService;
     }
 
     public void save(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         List<Role> allRoles = roleRepository.findAll();
         Role[] rolesArray = new Role[allRoles.size()];
         user.setRoles(allRoles.toArray(rolesArray));
         userRepository.save(user);
-    }
-
-    public User findByLogin(String login) {
-        return userRepository.findByLogin(login);
     }
 
     public User getUser(Long id) {
@@ -65,8 +55,6 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        final User user = getUser(id);
-        storageService.removeByFilename(user.getAvatarFilename());
         userRepository.delete(id);
     }
 }
