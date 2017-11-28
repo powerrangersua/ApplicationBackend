@@ -1,9 +1,9 @@
-DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE users(
-  USER_ID bigint(20) unsigned NOT NULL auto_increment,
-  name VARCHAR(20),
-  surname VARCHAR(20),
+  USER_ID INT(11) NOT NULL auto_increment,
+  name VARCHAR(255),
+  surname VARCHAR(255),
   age INT,
   PRIMARY KEY (USER_ID)
 ) ENGINE=innoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
