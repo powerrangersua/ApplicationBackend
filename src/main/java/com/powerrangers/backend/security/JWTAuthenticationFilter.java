@@ -24,7 +24,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private AuthenticationManager manager;
 
-    public JWTAuthenticationFilter(AuthenticationManager manager) {
+    JWTAuthenticationFilter(AuthenticationManager manager) {
         this.manager = manager;
     }
 
