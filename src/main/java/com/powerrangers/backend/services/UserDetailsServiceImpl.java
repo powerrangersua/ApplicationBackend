@@ -1,6 +1,6 @@
 package com.powerrangers.backend.services;
 
-import com.powerrangers.backend.models.User;
+import com.powerrangers.backend.models.Customer;
 import com.powerrangers.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,10 +23,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(s);
-        if (user == null) {
+        Customer customer = userRepository.findByUsername(s);
+        if (customer == null) {
             throw new UsernameNotFoundException(s);
         }
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), emptyList());
+        return new org.springframework.security.core.userdetails.User(customer.getUsername(), customer.getPassword(), emptyList());
     }
 }

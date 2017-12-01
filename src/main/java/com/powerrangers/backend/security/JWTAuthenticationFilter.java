@@ -1,17 +1,19 @@
 package com.powerrangers.backend.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.powerrangers.backend.models.User;
+import com.powerrangers.backend.models.Customer;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -32,8 +34,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
         try {
-            User credentials = new ObjectMapper().readValue(request.getInputStream(), User.class);
-            return manager.authenticate(new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword(), new ArrayList<>()));
+            ServletInputStream inputStream = request.getInputStream();
+            Customer credentials = new ObjectMapper().readValue(inputStream, Customer.class);
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword(), new ArrayList<>());
+            return manager.authenticate(token);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -41,10 +45,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
+        User user = (User) authResult.getPrincipal();
         String token = Jwts.builder()
-                .setSubject(((User) authResult.getPrincipal()).getUsername())
+                .setSubject(user.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.ES512, SECRET)
+                .signWith(SignatureAlgorithm.HS512, SECRET.getBytes())
                 .compact();
 
         response.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
