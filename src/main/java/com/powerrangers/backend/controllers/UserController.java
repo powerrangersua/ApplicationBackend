@@ -71,7 +71,9 @@ public class UserController {
     public ResponseEntity<Customer> createUser(@RequestBody Customer customer) {
         customer.setPassword(bCryptPasswordEncoder.encode(customer.getPassword()));
         Customer createdCustomer = userService.createUser(customer);
-        return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
+        if (createdCustomer != null) {
+            return new ResponseEntity<>(createdCustomer, HttpStatus.CREATED);
+        } else return new ResponseEntity<>(HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @RequestMapping(

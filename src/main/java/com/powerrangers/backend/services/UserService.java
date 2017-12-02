@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -39,10 +40,26 @@ public class UserService {
     }
 
     public Customer createUser(Customer customer) {
+        if (usernameExists(customer)) {
+            return null;
+        }
         return userRepository.save(customer);
     }
 
     public void deleteUser(Long id) {
         userRepository.delete(id);
+    }
+
+    private boolean usernameExists(Customer newCustomer) {
+        String existingUsername;
+        String usernameToCheck = newCustomer.getUsername();
+        List<Customer> list = userRepository.findAll();
+        for (Customer aList : list) {
+            existingUsername = aList.getUsername();
+            if (existingUsername.equals(usernameToCheck)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
