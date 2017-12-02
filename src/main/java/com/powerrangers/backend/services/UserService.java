@@ -1,7 +1,7 @@
 package com.powerrangers.backend.services;
 
+import com.powerrangers.backend.models.Customer;
 import com.powerrangers.backend.repositories.UserRepository;
-import com.powerrangers.backend.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,28 +18,28 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User getUser(Long id) {
+    public Customer getUser(Long id) {
         return userRepository.findOne(id);
     }
 
-    public Collection<User> getAll() {
+    public Collection<Customer> getAll() {
         return userRepository.findAll();
     }
 
-    public User updateUser(User user) {
-        User userToUpdate = getUser(user.getUserId());
-        if (userToUpdate == null) {
-            throw new NoResultException("User not found");
+    public Customer updateUser(Customer customer) {
+        Customer customerToUpdate = getUser(customer.getUserId());
+        if (customerToUpdate == null) {
+            throw new NoResultException("Customer not found");
         }
-        userToUpdate.setName(user.getName());
-        userToUpdate.setSurname(user.getSurname());
-        userToUpdate.setAge(user.getAge());
+        customerToUpdate.setName(customer.getName());
+        customerToUpdate.setSurname(customer.getSurname());
+        customerToUpdate.setAge(customer.getAge());
 
-        return userRepository.save(userToUpdate);
+        return userRepository.save(customerToUpdate);
     }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public Customer createUser(Customer customer) {
+        return userRepository.save(customer);
     }
 
     public void deleteUser(Long id) {
