@@ -15,6 +15,8 @@ public class Customer {
 
     private String name;
     private String surname;
+    @Column(name = "token")
+    private String resetToken;
 
 
     private int age;
@@ -57,6 +59,14 @@ public class Customer {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
     }
 
     public int getAge() {

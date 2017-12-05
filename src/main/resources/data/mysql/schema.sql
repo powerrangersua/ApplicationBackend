@@ -2,10 +2,11 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users(
   USER_ID INT(11) NOT NULL auto_increment,
-  username VARCHAR(255),
+  username VARCHAR(255) UNIQUE,
   password VARCHAR(255),
   name VARCHAR(255),
   surname VARCHAR(255),
   age INT,
+  token VARCHAR(255),
   PRIMARY KEY (USER_ID)
 ) ENGINE=innoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
